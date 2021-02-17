@@ -2,16 +2,20 @@
 #include <stdlib.h>
 
 int binary_search(int *array, int n, int value) {
-	int begin = 0;
-	int end = n;
+	if (n == 0) {
+		return -1;
+	}
+
+	int lo  = 0;
+	int hi  = n-1;
 	int mid = 0;	
 
-	while(begin < end) {
-		mid = begin + (end-begin)/2;
+	while(lo <= hi) {
+		mid = lo + (hi-lo)/2;
 		if (value < array[mid]) {
-			end = mid;
+			hi = mid - 1;
 		} else if (value > array[mid]) {
-			begin = mid + 1;
+			lo = mid + 1;
 		} else {
 			return mid;
 		}
@@ -25,7 +29,7 @@ int main()
 	int array[] = {1, 2, 3, 4, 5, 6, 7};
 	int n = sizeof(array) / sizeof(int);
 
-	int index = binary_search(array, n, 8);
+	int index = binary_search(array, n, 7);
 	if (-1 == index) {
 		printf("not found\n");
 	} else {
