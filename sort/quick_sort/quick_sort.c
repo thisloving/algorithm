@@ -1,58 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int pivot_index(int *array, int begin, int end) {
-	int pivot = array[begin];
-	--end;
-
-	while(begin < end) {
-		while(begin < end) {
-			if (pivot < array[end]) {
-				--end;
-			} else {
-				array[begin] = array[end];
-				++begin;
-				break;
-			}
-		}
-
-		while (begin < end) {
-			if (pivot > array[begin]) {
-				++begin;
-			} else {
-				array[end] = array[begin];
-				--end;
-				break;
-			}
-		}
-	}
-
-	array[begin] = pivot;
-	return begin;
+void swap(int* a, int* b) {
+	int  t = *a;
+	*a = *b;
+	*b = t;
 }
 
-void quick_sort(int *array, int begin, int end) {
-	if (end - begin < 2) {
-		return;
+int partition(int arr[], int low, int high) {
+	int pivot = arr[high];
+	int i = (low - 1);
+
+	for (int j = low; j < high; j++) {
+		if (arr[j] < pivot) {
+			i++;
+			swap(&arr[i], &arr[j]);
+		}
 	}
+	swap(&arr[i+1], &arr[high]);
+	return (i+1);
+}
 
-	int mid = pivot_index(array, begin, end);
+void quickSort(int arr[], int low, int high) {
+	if (low < high) {
+		int pi = partition(arr, low, high);
 
-	quick_sort(array, begin, mid);
-	quick_sort(array, mid+1, end);
+		quickSort(arr, low, pi-1);
+		quickSort(arr, pi+1, high);
+	}
+}
+
+void printArray(int arr[], int size) {
+	int i;
+	for (i = 0; i < size; i++) {
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
 }
 
 int main()
 {
-	int array[] = {33, 4, 5, 7, 3, 99, 87, 34, 23, 7, 8, 10};
-	int n = sizeof(array) / sizeof(int);
-	quick_sort(array, 0, n);
-
-	int i = 0;
-	for (i = 0; i < n; ++i) {
-		printf("%d ", array[i]);
-	}
-	printf("\n");
+	int arr[] = {10, 7, 8, 9, 1, 5};
+	int n = sizeof(arr) / sizeof(arr[0]);
+	quickSort(arr, 0, n-1);
+	printf("Sorted array:\n");
+	printArray(arr, n);
 
 	return 0;
 }
+
+//https://www.geeksforgeeks.org/quick-sort/
