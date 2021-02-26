@@ -7,7 +7,7 @@ void swap(int* a, int* b) {
 	*b = temp;
 }
 
-void selectionSort(int arr[], int n) {
+void selection_sort(int arr[], int n) {
 	if (n <= 1) {
 		return;
 	}
@@ -27,7 +27,7 @@ void selectionSort(int arr[], int n) {
 	}
 }
 
-void printArray(int arr[], int n) {
+void print_array(int arr[], int n) {
 	int i = 0;
 	for (i = 0; i < n; i++) {
 		printf("%d ", arr[i]);
@@ -40,8 +40,8 @@ int main()
 	int arr[] = {56, 9, 10, 19, 28, 37, 34};                                   
 	int n = sizeof(arr) / sizeof(n);   
 
-	selectionSort(arr, n);
-	printArray(arr, n);
+	selection_sort(arr, n);
+	print_array(arr, n);
 	
 	return 0;
 }
