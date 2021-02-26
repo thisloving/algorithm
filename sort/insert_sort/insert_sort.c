@@ -8,11 +8,11 @@ void insert_sort(int arr[], int n) {
 	int gap  = 1; 
 	for (i = gap; i < n; i++) {
 		temp = arr[i];
-		for (j = i-gap; j >= 0 && arr[j] > temp; j-=gap) { //Better understanding
-			arr[j+gap] = arr[j];
+		for (j = i; j-gap>=0 && arr[j-gap] > temp; j-=gap) { //Better understanding
+			arr[j] = arr[j-gap];
 		}
 
-		arr[j+gap] = temp;
+		arr[j] = temp;
 	}
 }
 
