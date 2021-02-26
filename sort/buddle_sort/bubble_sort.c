@@ -9,7 +9,7 @@ void swap(int* a, int* b) {
 	*b = temp;
 }
 
-void bubbleSort(int arr[], int n) {
+void bubble_sort(int arr[], int n) {
 	int i = 0;
 	int j = 0;
 	bool swapped = false;
@@ -29,7 +29,7 @@ void bubbleSort(int arr[], int n) {
 	}
 }
 
-void printArray(int arr[], int n) {
+void print_array(int arr[], int n) {
 	int i = 0;
 	for (i = 0; i < n; i++) {
 		printf("%d ", arr[i]);
@@ -41,6 +41,6 @@ int main()
 {
 	int arr[] = {9, 7, 8, 6, 5, 4, 3 , 2, 1};
 	int n = sizeof(arr) / sizeof(arr[0]);
-	bubbleSort(arr, n);
-	printArray(arr, n);
+	bubble_sort(arr, n);
+	print_array(arr, n);
 }
