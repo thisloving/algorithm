@@ -1,41 +1,47 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void selection_sort(int *array, int n) {
+void swap(int* a, int* b) {
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+void selectionSort(int arr[], int n) {
 	if (n <= 1) {
 		return;
 	}
 
-	int begin 	= 0;
-	int end 	= 0;
-	
-	for (end = n-1; end > 0; --end) {
-		int max_index = 0;
+	int i = 0;
+	int j = 0;
+	int min = 0;
 
-		for (begin = 1; begin <= end; ++begin) {
-			if (array[max_index] <= array[begin]) {
-				max_index = begin;
+	for (i = 0; i < n-1; i++) {
+		min = i;
+		for (j = i+1; j < n; j++) {
+			if (arr[min] > arr[j]) {
+				min = j;
 			}
 		}
-
-		int tmp 			= array[max_index];
-		array[max_index] 	= array[end];
-		array[end] 			= tmp;
+		swap(&arr[i], &arr[min]);
 	}
+}
+
+void printArray(int arr[], int n) {
+	int i = 0;
+	for (i = 0; i < n; i++) {
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
 }
 
 int main() 
 {
-	int array[] = {56, 9, 10, 19, 28, 37, 34};                                   
-	int n = sizeof(array) / sizeof(n);   
+	int arr[] = {56, 9, 10, 19, 28, 37, 34};                                   
+	int n = sizeof(arr) / sizeof(n);   
 
-	selection_sort(array, n);
-
-	int i = 0;                                                                   
-	for (i = 0; i < n; ++i) {                                                    
-		printf("%d ", array[i]);                                                 
-	}                                                                            
-	printf("\n"); 
-
+	selectionSort(arr, n);
+	printArray(arr, n);
+	
 	return 0;
 }
