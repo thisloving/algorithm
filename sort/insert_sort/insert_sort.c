@@ -1,24 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void swap(int* a, int* b) {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
 void insert_sort(int arr[], int n) {
 	int i = 0;
 	int j = 0;
 	int temp = 0;
-	for (i = 1; i < n; i++) {
-		for (j = i; j > 0; j--) { //Better understanding
-			if (arr[j-1] > arr[j]) {
-				swap(&arr[j-1], &arr[j]);
-			} else {
-				break;
-			}
+	int gap  = 1; 
+	for (i = gap; i < n; i++) {
+		temp = arr[i];
+		for (j = i-gap; j >= 0 && arr[j] > temp; j-=gap) { //Better understanding
+			arr[j+gap] = arr[j];
 		}
+
+		arr[j+gap] = temp;
 	}
 }
 
