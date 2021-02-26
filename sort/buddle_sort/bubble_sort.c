@@ -2,41 +2,45 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void bubble_sort(int* array, int n) {
-	if (n <= 1) {
-		return;
-	}
+void swap(int* a, int* b) {
+	int temp = 0;
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
 
-	int begin 	= 0;
-	int end 	= 0;
-	for (end = n - 1; end > 0; --end) {
-		int sorted_index = 1;
+void bubbleSort(int arr[], int n) {
+	int i = 0;
+	int j = 0;
+	bool swapped = false;
 
-		for (begin = 1; begin <= end; ++begin) {
-			if (array[begin] < array[begin-1]) {
-				int tmp 		= array[begin];
-				array[begin] 	= array[begin-1];
-				array[begin-1] 	= tmp;
-
-				sorted_index = begin;
+	for (i = 0; i < n; i++) { // for (i = 0; i < n-1; i++) {
+		swapped = false;
+		for (j = 0; j < n-i-1; j++) {
+			if (arr[j] < arr[j+1]) {
+				swap(&arr[j], &arr[j+1]);
+				swapped = true;
 			}
 		}
 
-		end = sorted_index;
+		if (!swapped) {
+			break;
+		}
 	}
 }
 
-int main() 
-{
-	int array[] = {56, 9, 10, 19, 28, 37, 34};
-	int n = sizeof(array) / sizeof(n);
-
-	bubble_sort(array, n);
-
+void printArray(int arr[], int n) {
 	int i = 0;
-	for (i = 0; i < n; ++i) {
-		printf("%d ", array[i]);
+	for (i = 0; i < n; i++) {
+		printf("%d ", arr[i]);
 	}
 	printf("\n");
 }
 
+int main() 
+{
+	int arr[] = {9, 7, 8, 6, 5, 4, 3 , 2, 1};
+	int n = sizeof(arr) / sizeof(arr[0]);
+	bubbleSort(arr, n);
+	printArray(arr, n);
+}
