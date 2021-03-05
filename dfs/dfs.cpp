@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <vector>
 #include <stack>
 
 using namespace std;
@@ -19,15 +20,14 @@ public:
 
 private:
 	int V;
-	std::map<int, std::set<int> > vertex;
-
+	std::map<int, std::vector<int> > vertex;
 	std::stack<int> s;
 	std::set<int> visited;
 };
 
 
 void Graph::AddVertex(int parent, int child) {
-	this->vertex[parent].insert(child);
+	this->vertex[parent].push_back(child);
 }
 
 void Graph::Initialize() {
@@ -46,25 +46,23 @@ void Graph::Initialize() {
 }
 
 void Graph::DFS(int vertex) {
-	std::set<int>::iterator iter1st = this->visited.find(vertex);
-	if (iter1st != this->visited.end()) {
+	if (this->visited.find(vertex) != this->visited.end()) {
 		return;
 	}
 
 	this->s.push(vertex);
-	
+
 	while(!this->s.empty()) {
 		int v = this->s.top();
 		cout << v << " ";
 		this->s.pop();
 
-		std::map<int, std::set<int> >::iterator iter2nd = this->vertex.find(v);
-		if (iter2nd != this->vertex.end()) {
-			std::set<int>::iterator iter3rd = iter2nd->second.begin();
-			for (; iter3rd != iter2nd->second.end(); ++iter3rd) {
-				this->s.push(*iter3rd);
-
-				this->visited.insert(v);
+		std::map<int, std::vector<int> >::iterator iter1st = this->vertex.find(v);
+		if (iter1st != this->vertex.end()) {
+			std::vector<int>::iterator iter2nd = iter1st->second.begin();
+			for (; iter2nd != iter1st->second.end(); ++iter2nd) {
+				this->s.push(*iter2nd);
+				this->visited.insert(*iter2nd);
 			}
 		}
 	}
