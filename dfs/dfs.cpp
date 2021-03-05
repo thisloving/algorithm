@@ -34,23 +34,43 @@ void Graph::Initialize() {
 	this->V = kVertexNum;
 	this->vertex.clear();
 
+#if 0
 	this->AddVertex(0, 1);	
 	this->AddVertex(0, 2);
 	this->AddVertex(1, 3);
 	this->AddVertex(1, 4);
 	this->AddVertex(2, 5);
 	this->AddVertex(2, 6);
+#else
+	this->AddVertex(0, 1);                                                          
+	this->AddVertex(0, 2);                                                          
+	this->AddVertex(1, 0);                                                          
+	this->AddVertex(1, 3);                                                          
+	this->AddVertex(2, 0);                                                          
+	this->AddVertex(2, 3);                                                          
+	this->AddVertex(3, 1);                                                          
+	this->AddVertex(3, 2);                                                          
+	this->AddVertex(3, 4);                                                          
+	this->AddVertex(3, 5);                                                          
+	this->AddVertex(4, 3);                                                          
+	this->AddVertex(4, 6);                                                          
+	this->AddVertex(5, 3);                                                          
+	this->AddVertex(5, 6);                                                          
+	this->AddVertex(6, 4);                                                          
+	this->AddVertex(6, 5);  
+#endif
 
 	stack<int>().swap(this->s);
 	this->visited.clear();
 }
 
 void Graph::DFS(int vertex) {
-	if (this->visited.find(vertex) != this->visited.end()) {
+	if (vertex+1 > kVertexNum) {
 		return;
 	}
 
 	this->s.push(vertex);
+	this->visited.insert(vertex);
 
 	while(!this->s.empty()) {
 		int v = this->s.top();
@@ -61,6 +81,10 @@ void Graph::DFS(int vertex) {
 		if (iter1st != this->vertex.end()) {
 			std::vector<int>::iterator iter2nd = iter1st->second.begin();
 			for (; iter2nd != iter1st->second.end(); ++iter2nd) {
+				if (this->visited.find(*iter2nd) != this->visited.end()) {
+					continue;
+				}
+
 				this->s.push(*iter2nd);
 				this->visited.insert(*iter2nd);
 			}
@@ -75,7 +99,5 @@ int main()
 
 	graph.Initialize();
 
-	for (int i = 0; i < kVertexNum; i++) {
-		graph.DFS(i);	
-	}
+	graph.DFS(6);	
 }
