@@ -5,8 +5,8 @@ import "fmt"
 // p is the length of palindrome
 // -----maxRight---mirror--------------center--------------i---maxRight
 
-// 1、p[mirror] < maxRight-i,  p[i] = p[mirror], (p[mirror] < maxRight-i)
-// 2、p[mirror] == maxRight-i, p[i] = (maxRight-1)+
+// 1、p[mirror] < maxRight-i,  p[i] = p[mirror]     //(p[mirror] < maxRight-i)
+// 2、p[mirror] == maxRight-i, p[i] = (maxRight-i)+
 // 3、p[mirror] > maxRight-i,  p[i] = maxRight-i
 
 // p[i] = min(p[mirror], maxRight-i), then center spread
