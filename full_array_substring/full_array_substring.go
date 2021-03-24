@@ -9,34 +9,37 @@ func fullArraySubstring(s string, noRepeatStr string) int {
 		return 0
 	}
 
-	m := make(map[string]int)
 	left := 0
-	for right := 0; right < len(s); right++ {
-		if pos, ok := m[string(s[right])]; ok {
-			if left <= pos {
-				left = pos + 1
-				for i := pos; i < left; i++ {
-					delete(m, string(s[i]))
-				}
-			}
-		} else {
-			isIn := false
-			for _, v := range noRepeatStr {
-				if string(v) == string(s[right]) {
-					isIn = true
-					break
-				}
-			}
 
-			if !isIn {
-				m = make(map[string]int)
-				left = right + 1
-				continue
+	m := make(map[string]int)
+
+	for right := 0; right < len(s); right++ {
+		isIn := false
+		for _, v := range noRepeatStr {
+			if string(v) == string(s[right]) {
+				isIn = true
+				break
 			}
 		}
 
+		if !isIn {
+			// clear
+			m = make(map[string]int)
+			left = right + 1
+			continue
+		}
+
+		if pos, ok := m[string(s[right])]; ok {
+			for i := left; i <= pos; i++ {
+				delete(m, string(s[i]))
+			}
+			left = pos + 1
+		}
+
 		m[string(s[right])] = right
-		if len(noRepeatStr) == len(m) {
+
+		if len(m) == len(noRepeatStr) {
+			// found
 			return left
 		}
 	}
@@ -45,9 +48,9 @@ func fullArraySubstring(s string, noRepeatStr string) int {
 }
 
 func main() {
-	s := "dcbxabctbcacbdata"
+	s := "abcabcabcaadbccbdabcds"
 	noRepeatStr := "abcd"
 
-	n := fullArraySubstring(s, noRepeatStr)
-	fmt.Println(n)
+	index := fullArraySubstring(s, noRepeatStr)
+	fmt.Println(index)
 }
