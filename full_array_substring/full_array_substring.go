@@ -12,17 +12,13 @@ func fullArraySubstring(s string, noRepeatStr string) int {
 	left := 0
 
 	m := make(map[string]int)
+	n := make(map[string]int)
+	for i := 0; i < len(noRepeatStr); i++ {
+		n[string(noRepeatStr[i])] = i
+	}
 
 	for right := 0; right < len(s); right++ {
-		isIn := false
-		for _, v := range noRepeatStr {
-			if string(v) == string(s[right]) {
-				isIn = true
-				break
-			}
-		}
-
-		if !isIn {
+		if _, ok := n[string(s[right])]; !ok {
 			// clear
 			m = make(map[string]int)
 			left = right + 1
@@ -48,7 +44,7 @@ func fullArraySubstring(s string, noRepeatStr string) int {
 }
 
 func main() {
-	s := "abcabcabcaadbccbdabcds"
+	s := "abfcabcabcaadbccbdabcds"
 	noRepeatStr := "abcd"
 
 	index := fullArraySubstring(s, noRepeatStr)
