@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func isSubstring(s string, p string) bool {
+func isSubsequence(s string, p string) bool {
 	m := len(s) + 1
 	n := len(p) + 1
 
@@ -25,23 +25,34 @@ func isSubstring(s string, p string) bool {
 
 	for j := 1; j < n; j++ {
 		for i := 1; i < m; i++ {
-			if s[i-1] == p[j-1] {
-				dp[i][j] = dp[i-1][j-1]
+			if dp[i-1][j] {
+				dp[i][j] = true
+			} else if s[i-1] == p[j-1] && dp[i-1][j-1] {
+				dp[i][j] = true
+			} else {
+				dp[i][j] = false
 			}
 		}
 	}
 
 	res := false
-	for i := 0; i < m; i++ {
+	for i := 1; i < m; i++ {
 		res = res || dp[i][n-1]
+	}
+
+	for j := 0; j < n; j++ {
+		for i := 0; i < m; i++ {
+			fmt.Printf("%6v", dp[i][j])
+		}
+		fmt.Println()
 	}
 
 	return res
 }
 
 func main() {
-	s := "xcsdwsdsdabcdwewewwdw"
-	p := "abc"
+	s := "abcdefghijklmnop"
+	p := "aem"
 
-	fmt.Println(isSubstring(s, p))
+	fmt.Println(isSubsequence(s, p))
 }
