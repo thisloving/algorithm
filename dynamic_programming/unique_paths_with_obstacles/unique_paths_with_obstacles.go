@@ -18,7 +18,7 @@ func uniquePathsWithObstacles(array [][]int, m int, n int) int {
 	dp[0][0] = 1
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
-			if array[j][i] == 1 {
+			if array[i][j] == 1 {
 				dp[i][j] = 0
 			} else {
 				if i == 0 || j == 0 {
@@ -49,5 +49,5 @@ func main() {
 		{0, 0, 0, 0, 0, 0},
 	}
 
-	fmt.Println(uniquePathsWithObstacles(array, 6, 5))
+	fmt.Println(uniquePathsWithObstacles(array, 5, 6))
 }
