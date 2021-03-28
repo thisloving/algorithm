@@ -110,6 +110,9 @@ void Graph::Dijkstra(int start, int end) {
 			this->path[v.dst] = v.src;
 			
 			cout << v.dst << " ";
+		} else {
+			// visited
+			continue;
 		}
 
 		std::map<int, std::vector<struct Edge> >::iterator iter1st = 
