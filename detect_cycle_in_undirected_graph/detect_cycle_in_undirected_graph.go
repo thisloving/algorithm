@@ -2,6 +2,9 @@ package detect_cycle_in_undirected_graph
 
 import "fmt"
 
+//Time: O(v+e)
+//Space: O(v)
+
 type UnDirectedGraph struct {
 	graph    map[int][]int
 	node     map[int]struct{}
@@ -50,12 +53,14 @@ func (g *UnDirectedGraph) IsUnDirectedGraphCycle() bool {
 			fmt.Println("------------------------------------------")
 			fmt.Println("dfs node ", node)
 		}
-		if g.detectCycle(node, visited, parent) {
-			return false
+
+		_, found := visited[node]
+		if !found && g.detectCycle(node, visited, parent) {
+			return true
 		}
 	}
 
-	return true
+	return false
 }
 
 func (g *UnDirectedGraph) detectCycle(
