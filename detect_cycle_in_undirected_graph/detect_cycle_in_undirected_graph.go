@@ -80,16 +80,14 @@ func (g *UnDirectedGraph) detectCycle(
 			fmt.Printf("current node: %d\n", node)
 			fmt.Printf("visited: %+v\n", visited)
 			fmt.Printf("parent: %d\n", parent)
-		}
-		if child != parent {
-			if g.printLog {
+
+			if child != parent {
 				fmt.Printf("visited child: node %d\n\n", child)
-			}
-		} else {
-			if g.printLog {
+			} else {
 				fmt.Printf("not visited child, node %d. It is parent.\n\n", child)
 			}
 		}
+
 		if child != parent && g.detectCycle(child, visited, node) {
 			return true
 		}
