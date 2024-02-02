@@ -72,10 +72,12 @@ func TestAhocorasick(t *testing.T) {
 	ac := NewAcTrie()
 
 	words := []string{"aquaj", "jack", "ack", "card", "care"}
+	//words := []string{"i", "is", "he", "his", "she", "hers"}
 	ac.BuildTrie(words)
 	ac.BuildFailPointer()
 
 	content := "aquajackcarecardcatdogcancare"
+	//content := "she is hers"
 	result := ac.Search(content)
 	for _, res := range result {
 		fmt.Printf("%-3d %-3d %s\n", res.Begin, res.End, string(res.Value))

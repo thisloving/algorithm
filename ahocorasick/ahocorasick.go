@@ -8,7 +8,7 @@ import (
 type AcTrieNode struct {
 	children map[rune]*AcTrieNode // parent ---> children
 	fail     *AcTrieNode          // fail pointer
-	lengths  []int                // word length
+	lengths  map[int]struct{}     // words length
 	isRoot   bool                 // is root
 }
 
@@ -16,7 +16,7 @@ func NewAcTrieNode(isRoot bool) *AcTrieNode {
 	return &AcTrieNode{
 		children: map[rune]*AcTrieNode{},
 		fail:     nil,
-		lengths:  make([]int, 0),
+		lengths:  make(map[int]struct{}),
 		isRoot:   isRoot,
 	}
 }
@@ -52,23 +52,17 @@ func NewAcTrie() *AcTrie {
 	return t
 }
 
-func (ac *AcTrie) addLengths(current *AcTrieNode, lengths []int) {
+func (ac *AcTrie) addLengths(current *AcTrieNode, lengths map[int]struct{}) {
 	if len(lengths) <= 0 {
 		return
 	}
 
-	for _, wordLen := range current.lengths {
-		for i := 0; i < len(lengths); {
-			if lengths[i] == wordLen {
-				lengths = append(lengths[:i], lengths[i+1:]...)
-			} else {
-				i++
-			}
+	for length := range lengths {
+		if length == 0 {
+			continue
 		}
-	}
 
-	if len(lengths) > 0 {
-		current.lengths = append(current.lengths, lengths...)
+		current.lengths[length] = struct{}{}
 	}
 }
 
@@ -92,7 +86,10 @@ func (ac *AcTrie) insert(keyWord string) {
 		current = current.children[word]
 	}
 
-	ac.addLengths(current, []int{utf8.RuneCountInString(keyWord)})
+	length := utf8.RuneCountInString(keyWord)
+	lengths := make(map[int]struct{})
+	lengths[length] = struct{}{}
+	ac.addLengths(current, lengths)
 }
 
 // build fail pointer
@@ -156,10 +153,14 @@ func (ac *AcTrie) Search(content string) []*Hit {
 			continue
 		}
 
-		for _, length := range current.lengths {
+		for length := range current.lengths {
+			if length == 0 {
+				continue
+			}
+
 			hit := &Hit{
 				Begin: index + 1 - length,
-				End:   index + 1,
+				End:   index,
 				Value: make([]rune, length)}
 			copy(hit.Value, contents[index+1-length:index+1])
 
