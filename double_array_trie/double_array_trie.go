@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	extraSize int = 10
 	rootIndex int = 0
 	failState int = -1
+	extraSize int = 10
 )
 
 type DoubleArrayTrie struct {
@@ -257,7 +257,7 @@ func (ac *AcDoubleArrayTrie) getBase(parent *Node) int {
 }
 
 func (ac *AcDoubleArrayTrie) backtraceFailNode(parentIndex int, code rune) int {
-	base := ac.base[parentIndex] // b >= 0
+	base := ac.base[parentIndex] // base >= 0
 	childIndex := base + int(code)
 
 	if len(ac.base) <= childIndex {
@@ -281,7 +281,7 @@ func (ac *AcDoubleArrayTrie) backtraceFailNode(parentIndex int, code rune) int {
 func (ac *AcDoubleArrayTrie) BuildFailPointer(root *Node) {
 	queue := make([]*Node, 0)
 
-	// depth=0 or depth=1, fail pointer point to rootIndex
+	// depth=0 and depth=1, fail pointer point to rootIndex
 	ac.fail[root.index] = rootIndex
 	for _, child := range root.children {
 		ac.fail[child.index] = rootIndex
@@ -317,8 +317,8 @@ type Hit struct {
 	Value []rune
 }
 
-func (ac *AcDoubleArrayTrie) Search(content []rune) []Hit {
-	hits := []Hit{}
+func (ac *AcDoubleArrayTrie) Search(content []rune) []*Hit {
+	hits := []*Hit{}
 	parentIndex := rootIndex
 	for index, code := range content {
 		failPointer := ac.backtraceFailNode(parentIndex, code)
@@ -334,7 +334,7 @@ func (ac *AcDoubleArrayTrie) Search(content []rune) []Hit {
 				continue
 			}
 
-			hit := Hit{
+			hit := &Hit{
 				Begin: index + 1 - length,
 				End:   index,
 				Value: make([]rune, length),
@@ -342,6 +342,46 @@ func (ac *AcDoubleArrayTrie) Search(content []rune) []Hit {
 			copy(hit.Value, content[index+1-length:index+1])
 			hits = append(hits, hit)
 		}
+	}
+
+	return hits
+}
+
+// ignore whitelist
+func IgnoreWithWhiteList(acHits []*Hit, whitelistHits []*Hit) []*Hit {
+	hits := make([]*Hit, 0)
+
+	ignore := func(hit *Hit, whitelists []*Hit) bool {
+		if hit.Begin > hit.End {
+			hit.Begin, hit.End = hit.End, hit.Begin
+		}
+
+		for _, whitelist := range whitelists {
+			if whitelist.Begin > whitelist.End {
+				whitelist.Begin, whitelist.End = whitelist.End, whitelist.Begin
+			}
+
+			if hit.Begin >= whitelist.Begin &&
+				hit.End <= whitelist.End {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	for _, acHit := range acHits {
+		if ignore(acHit, whitelistHits) {
+			continue
+		}
+
+		hit := &Hit{
+			Begin: acHit.Begin,
+			End:   acHit.End,
+			Value: make([]rune, len(acHit.Value)),
+		}
+		copy(hit.Value, acHit.Value)
+		hits = append(hits, hit)
 	}
 
 	return hits
