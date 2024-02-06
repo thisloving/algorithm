@@ -21,8 +21,8 @@ func NewAcTrieNode(isRoot bool) *AcTrieNode {
 	}
 }
 
-func (node *AcTrieNode) backtraceFailNode(word rune) *AcTrieNode {
-	child, ok := node.children[word]
+func (node *AcTrieNode) backtraceFailNode(code rune) *AcTrieNode {
+	child, ok := node.children[code]
 	if ok {
 		return child
 	}
@@ -74,19 +74,19 @@ func (ac *AcTrie) BuildTrie(keyWords []string) {
 }
 
 // build trie
-func (ac *AcTrie) insert(keyWord string) {
-	words := []rune(keyWord)
+func (ac *AcTrie) insert(word string) {
+	characters := []rune(word)
 	current := ac.root
 
-	for _, word := range words {
-		if _, ok := current.children[word]; !ok {
-			current.children[word] = NewAcTrieNode(false)
+	for _, code := range characters {
+		if _, ok := current.children[code]; !ok {
+			current.children[code] = NewAcTrieNode(false)
 		}
 
-		current = current.children[word]
+		current = current.children[code]
 	}
 
-	length := utf8.RuneCountInString(keyWord)
+	length := utf8.RuneCountInString(word)
 	lengths := make(map[int]struct{})
 	lengths[length] = struct{}{}
 	ac.addLengths(current, lengths)
@@ -116,12 +116,12 @@ func (ac *AcTrie) BuildFailPointer() {
 			continue
 		}
 
-		for word, child := range parent.children {
+		for code, child := range parent.children {
 			current := parent.fail
-			node := current.backtraceFailNode(word)
+			node := current.backtraceFailNode(code)
 			for node == nil {
 				current = current.fail
-				node = current.backtraceFailNode(word)
+				node = current.backtraceFailNode(code)
 			}
 
 			child.fail = node
@@ -132,11 +132,11 @@ func (ac *AcTrie) BuildFailPointer() {
 	}
 }
 
-func (ac *AcTrie) getNextChild(parent *AcTrieNode, word rune) *AcTrieNode {
-	child := parent.backtraceFailNode(word)
+func (ac *AcTrie) getNextChild(parent *AcTrieNode, code rune) *AcTrieNode {
+	child := parent.backtraceFailNode(code)
 	for child == nil {
 		parent = parent.fail
-		child = parent.backtraceFailNode(word)
+		child = parent.backtraceFailNode(code)
 	}
 
 	return child
@@ -147,8 +147,8 @@ func (ac *AcTrie) Search(content string) []*Hit {
 
 	contents := []rune(content)
 	current := ac.root
-	for index, word := range contents {
-		current = ac.getNextChild(current, word)
+	for index, code := range contents {
+		current = ac.getNextChild(current, code)
 		if len(current.lengths) <= 0 {
 			continue
 		}
